@@ -14,51 +14,6 @@ fetch(url)
     .catch(e => console.log(e))
 
 
-
-// console.log(coffeeFetched)
-// async function fetched(fetchWhat){
-//     fetch(url)
-//         .then(response => response.json())
-//         .then(r => {
-//             let fetched
-//             for (let i in r){
-//                 console.log(i)
-//                 if(i === fetchWhat){
-//                     fetched = i;
-//                 }
-//                 // r.fetchedName
-//             }
-//             console.log(r[fetched])
-//             let fetchResult = r[fetched];
-//             return fetchResult
-//         })
-//         .catch(e => console.log(e))
-// }
-
-async function fetched(){
-    let fetchedCoffee;
-    let fetchResult;
-    fetch(url)
-        .then(response => response.json())
-        .then(r => {
-
-            for (let i in r){
-                console.log(i)
-                if(i === 'coffee'){
-                    fetchedCoffee = i;
-                }
-                // r.fetchedName
-            }
-            console.log(r[fetchedCoffee]);
-            fetchResult = r[fetchedCoffee];
-            console.log(fetchResult)
-        })
-    return fetchResult
-        // .catch(e => console.log(e))
-}
-
-
-
 async function postCoffee(coffee) {
     await fetch(url, {
         method: 'PATCH',
@@ -70,13 +25,8 @@ async function postCoffee(coffee) {
         },
     })
         .then(response => response.json())
-        .then(json=> {
-            console.log(json)
-            let q = fetched()
-            console.log(q)
-        })
+        .then(json=> {console.log(json)})
         .catch(e=> console.log(e))
-
 }
 
 async function postSize(size) {
@@ -92,7 +42,6 @@ async function postSize(size) {
         .then(response => response.json())
         .then(json=> console.log(json))
         .catch(e=> console.log(e))
-
 }
 
 async function postName(name) {
@@ -108,72 +57,76 @@ async function postName(name) {
         .then(response => response.json())
         .then(json=> console.log(json))
         .catch(e=> console.log(e))
-
 }
 
 
 /////////////////-------------- FORMS---------///////////
 
 // GET COFFEE
+let coffee
 COFFEE_DATA.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(COFFEE_DATA);
-    const coffee = formData.get('coffee');
+    coffee = formData.get('coffee');
 
-    postCoffee(coffee)
-        .then(() => {
-            SIZE_DATA.style.display = 'block';
-            COFFEE_DATA.style.display = 'none';
-        })
-        .catch(e => console.log(e))
-
+    if (!coffee) {
+        alert('пожалуйста, скажите какой вы хотели бы кофе!')
+    } else {
+        postCoffee(coffee)
+            .then(() => {
+                SIZE_DATA.style.display = 'block';
+                COFFEE_DATA.style.display = 'none';
+            })
+            .catch(e => console.log(e))
+    }
 })
 
 // GET SIZE
+let size
 SIZE_DATA.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(SIZE_DATA);
-    const size = formData.get('size');
+    size = formData.get('size');
 
-    postSize(size)
-        .then(() => {
-            SIZE_DATA.style.display = 'none';
-            NAME_DATA.style.display = 'block';
-        })
-        .catch(e => console.log(e))
-
+    if (!size) {
+        alert('пожалуйста, подскажите какого объема хотели бы напиток!')
+    } else {
+        postSize(size)
+            .then(() => {
+                SIZE_DATA.style.display = 'none';
+                NAME_DATA.style.display = 'block';
+            })
+            .catch(e => console.log(e))
+    }
 })
 
 
 
 // GET NAME
+let name
 NAME_DATA.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(NAME_DATA);
-    const name = formData.get('name');
+    name = formData.get('name');
 
-    const nameFetched = fetched('name')
-        .then(r => r)
-        .catch(e=> console.log(e))
-    const coffeeFetched = fetched('coffee')
-        .then(r => r)
-        .catch(e=> console.log(e))
+    if (!name) {
+        alert('простите, не расслышала ваше имя! повторите, пожалуйста?')
+    } else {
+        postName(name)
+            .then(() => {
+                NAME_DATA.style.display = 'none';
 
-    postName(name)
-        .then(() => {
-            NAME_DATA.style.display = 'none';
+                img.src = 'assets/coffeeBrewing.gif'
+                document.body.style.backgroundColor = '#08343A';
+                title.innerText = 'готовим ваш кофэ!!'
 
-            img.src = 'assets/coffeeBrewing.gif'
-            document.body.style.backgroundColor = '#08343A';
-            title.innerText = 'готовим ваш кофэ!!'
-
-            setTimeout(() => {
-                img.src = 'assets/coffeeCup.gif'
-                document.body.style.backgroundColor = '#FFE31C';
-                title.innerText = `${nameFetched}, ваш ${coffeeFetched}, приходите еще!!`
-            }, 10000)
-        })
-
+                setTimeout(() => {
+                    img.src = 'assets/coffeeCup.gif'
+                    document.body.style.backgroundColor = '#FFE31C';
+                    title.innerText = `${name}, вот ваш ${coffee}, приходите еще!!`
+                }, 10000)
+            })
+    }
 })
 
 

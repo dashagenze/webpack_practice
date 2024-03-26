@@ -4,6 +4,8 @@ const COFFEE_DATA = document.getElementById('COFFEE');
 const SIZE_DATA = document.getElementById('SIZE');
 const NAME_DATA = document.getElementById('NAME');
 const button = document.getElementById('btn');
+const img = document.getElementById('img');
+const title = document.getElementById('title')
 
 SIZE_DATA.style.display = 'none';
 NAME_DATA.style.display = 'none';
